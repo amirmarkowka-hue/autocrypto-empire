@@ -18,22 +18,13 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev cmake libffi-dev libssl-dev libtinfo5
 
-      - name: Install Buildozer
-        run: |
-          pip install --upgrade pip
-          pip install buildozer cython==0.29.36
-
-      # Очищаем кэш сборки перед запуском
-      - name: Clean Buildozer cache
-        run: |
-          rm -rf ~/.buildozer
-          rm -rf .buildozer
-
       - name: Build with Buildozer Action
         uses: ArtemSBulgakov/buildozer-action@v1
         with:
           command: buildozer android debug
           buildozer_version: stable
+          # ВОТ ГЛАВНОЕ ИСПРАВЛЕНИЕ:
+          image: kivy/buildozer:stable
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
