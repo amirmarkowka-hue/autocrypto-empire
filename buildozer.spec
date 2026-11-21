@@ -6,22 +6,21 @@ source.dir = .
 source.include_exts = py,png,jpg,kv,atlas
 version = 1.0
 
-# Важно: указываем pyjnius для работы с Android API
-requirements = python3,kivy,pyjnius
+requirements = python3,kivy==2.2.1,pyjnius,cython==0.29.36
 
 orientation = portrait
 fullscreen = 0
 
-# --- Критически важные настройки для Android ---
+# Вот эта строчка заставит робота принять лицензии БЕЗ ОШИБОК
 android.accept_sdk_license = True
-android.skip_update = False
+
 android.api = 33
 android.minapi = 21
-android.ndk = 25b
+android.ndk = 23b
 android.ndk_api = 21
-android.archs = arm64-v8a, armeabi-v7a
-android.permissions = INTERNET
 
-# Фиксируем версии инструментов для стабильности
-android.sdk = 24
-android.buildtools = 30.0.3
+# Оставляем только 64-битную архитектуру (для современных телефонов)
+# Это снизит нагрузку и не даст сборке упасть из-за нехватки памяти
+android.archs = arm64-v8a
+
+android.permissions = INTERNET
