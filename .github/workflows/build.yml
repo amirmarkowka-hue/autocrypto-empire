@@ -8,6 +8,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # Увеличиваем виртуальную память (Swap) до 6 ГБ
+      - name: Create Swap
+        run: |
+          sudo fallocate -l 6G /swapfile
+          sudo chmod 600 /swapfile
+          sudo mkswap /swapfile
+          sudo swapon /swapfile
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -25,7 +33,8 @@ jobs:
 
       - name: Build APK
         run: |
-          # Автоматически отвечаем "y" на все вопросы лицензий
+          # Ограничиваем компиляцию одним ядром, чтобы не забить память
+          export MAKEFLAGS="-j1"
           echo "y" | buildozer android debug
 
       - name: Upload APK
